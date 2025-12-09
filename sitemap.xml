@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://infinitewordle.github.io/</loc>
+  <lastmod>2025-12-09T23:00:43+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://infinitewordle.github.io/connections.html</loc>
+  <lastmod>2025-12-09T23:00:43+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://infinitewordle.github.io/spelling-bee.html</loc>
+  <lastmod>2025-12-09T23:00:43+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://infinitewordle.github.io/crossword.html</loc>
+  <lastmod>2025-12-09T23:00:43+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://infinitewordle.github.io/mini-crossword.html</loc>
+  <lastmod>2025-12-09T23:00:43+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://infinitewordle.github.io/strands.html</loc>
+  <lastmod>2025-12-09T23:00:43+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://infinitewordle.github.io/letter-boxed.html</loc>
+  <lastmod>2025-12-09T23:00:43+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://infinitewordle.github.io/tiles.html</loc>
+  <lastmod>2025-12-09T23:00:43+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://infinitewordle.github.io/about.html</loc>
+  <lastmod>2025-12-09T23:00:43+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+
+
+</urlset>
