@@ -539,29 +539,6 @@ h4 {
   height: 24px;
 }
 
-.footer-links {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.footer-link {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 14px;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.footer-link:hover {
-    color: var(--text-primary);
-}
-
-.footer-link-separator {
-    color: var(--text-muted);
-    font-size: 14px;
-}
-
 .copyright {
   font-size: 14px;
   color: var(--text-muted);
@@ -614,18 +591,6 @@ h4 {
   .footer-bottom {
     flex-direction: column;
     text-align: center;
-    /* Redo footer-bottom for mobile to stack elements */
-    justify-content: center;
-  }
-
-  .footer-logo,
-  .copyright {
-      margin-bottom: 12px; /* Add spacing between stacked elements */
-  }
-
-  .footer-links {
-      order: 1; /* Place links between logo and copyright */
-      margin-bottom: 12px;
   }
 
   /* Adjust game iframe on mobile */
