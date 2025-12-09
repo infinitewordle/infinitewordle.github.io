@@ -1,256 +1,756 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S1NMW2WL8F"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-S1NMW2WL8F');
-    </script>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Letter Boxed: Connect letters around the edges of a box to form words. The last letter of one word must be the first letter of the next.">
-    <meta name="keywords" content="letter boxed, word game, connection puzzle, word links, unlimited">
-    <meta name="author" content="Infinite Wordle">
-    <meta name="robots" content="index, follow">
-    
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23fa5252'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' font-weight='bold' text-anchor='middle' fill='%23fff'%3EL%3C/text%3E%3C/svg%3E">
-    <link rel="canonical" href="https://infinitewordle.github.io/letter-boxed.html">
-    
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "VideoGame",
-      "name": "Letter Boxed Unlimited",
-      "description": "Form a chain of words using letters placed on the sides of a square, aiming to use all letters in as few words as possible.",
-      "url": "https://infinitewordle.github.io/letter-boxed.html",
-      "applicationCategory": "GameApplication",
-      "genre": "Word game",
-      "operatingSystem": "All",
-      "image": "https://infinitewordle.github.io/og-image-letter-boxed.png",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Infinite Wordle"
-      }
-    }
-    </script>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <title>Letter Boxed | Infinite Wordle Games</title>
-    
-    <link rel="stylesheet" href="styles.css">
+    <title>Letter Boxed Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a237e 0%, #311b92 100%);
+            color: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 8px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 20px;
+            line-height: 1.5;
+        }
+
+        .game-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .game-board {
+            flex: 1;
+            min-width: 320px;
+            max-width: 450px;
+        }
+
+        .box-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .box-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .letter-box {
+            width: 70px;
+            height: 70px;
+            margin: 8px;
+            background: linear-gradient(145deg, #3949ab, #283593);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .letter-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(145deg, #5c6bc0, #3949ab);
+        }
+
+        .letter-box.selected {
+            background: linear-gradient(145deg, #ff9800, #f57c00);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 152, 0, 0.5);
+        }
+
+        .letter-box.used {
+            opacity: 0.5;
+            background: linear-gradient(145deg, #757575, #616161);
+        }
+
+        .letter-box.last-selected {
+            border: 3px solid #ffeb3b;
+            box-shadow: 0 0 15px rgba(255, 235, 59, 0.7);
+        }
+
+        .game-controls {
+            flex: 1;
+            min-width: 320px;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .controls-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .current-word {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: #ffeb3b;
+            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .word-list {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            flex-grow: 1;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            max-height: 200px;
+            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .word-list h3 {
+            margin-bottom: 10px;
+            color: #bb86fc;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #bb86fc;
+            padding-bottom: 5px;
+        }
+
+        .words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .word {
+            background: linear-gradient(145deg, #6200ea, #3700b3);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(145deg, #4caf50, #2e7d32);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(145deg, #66bb6a, #388e3c);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-clear {
+            background: linear-gradient(145deg, #f44336, #c62828);
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: linear-gradient(145deg, #ef5350, #d32f2f);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+
+        .btn-new-game {
+            background: linear-gradient(145deg, #2196f3, #0d47a1);
+            color: white;
+            margin-top: 15px;
+        }
+
+        .btn-new-game:hover {
+            background: linear-gradient(145deg, #42a5f5, #1565c0);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .info-box {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        .info-box h3 {
+            color: #bb86fc;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .info-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+
+        .rules {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .rules h2 {
+            color: #bb86fc;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .rules ol {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+
+        .rules li {
+            margin-bottom: 10px;
+        }
+
+        .message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .message.success {
+            background-color: #4caf50;
+            color: white;
+            opacity: 1;
+        }
+
+        .message.error {
+            background-color: #f44336;
+            color: white;
+            opacity: 1;
+        }
+
+        .message.info {
+            background-color: #2196f3;
+            color: white;
+            opacity: 1;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .game-board, .game-controls {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .letter-box {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .letter-box {
+                width: 50px;
+                height: 50px;
+                font-size: 1.6rem;
+                margin: 5px;
+            }
+            
+            .current-word {
+                font-size: 2rem;
+                letter-spacing: 5px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container header-content">
-            <a href="/" class="logo">
-                <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="32" height="32" fill="currentColor"/>
-                    <text x="16" y="22" font-family="monospace" font-size="18" font-weight="bold" text-anchor="middle" fill="var(--bg-primary)">I</text>
-                </svg>
-                <span class="logo-text">INFINITE WORDLE</span>
-            </a>
-            <nav class="nav">
-                <a href="#all-games" class="nav-link">All Games</a>
-                <a href="#how-to-play" class="nav-link">How to Play</a>
-                <a href="#about" class="nav-link">About</a>
-            </nav>
-            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="4"></circle>
-                    <path d="M12 2v2"></path>
-                    <path d="M12 20v2"></path>
-                    <path d="m4.93 4.93 1.41 1.41"></path>
-                    <path d="m17.66 17.66 1.41 1.41"></path>
-                    <path d="M2 12h2"></path>
-                    <path d="M20 12h2"></path>
-                    <path d="m6.34 17.66-1.41 1.41"></path>
-                    <path d="m19.07 4.93-1.41 1.41"></path>
-                </svg>
-                <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-                </svg>
-            </button>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="4" x2="20" y1="12" y2="12"></line>
-                    <line x1="4" x2="20" y1="6" y2="6"></line>
-                    <line x1="4" x2="20" y1="18" y2="18"></line>
-                </svg>
-            </button>
-        </div>
-    </header>
-
-    <nav class="mobile-nav" id="mobileNav">
-        <span class="mobile-nav-section">Menu</span>
-        <a href="#all-games" class="mobile-nav-link">All Games</a>
-        <a href="#how-to-play" class="mobile-nav-link">How to Play</a>
-        <a href="#about" class="mobile-nav-link">About</a>
-    </nav>
-
-    <main>
-        <section class="hero">
-            <div class="container">
-                <div class="hero-badge">
-                    <span class="badge">WORD CHAIN</span>
-                </div>
-                <h1 class="hero-title">Solve the<br><span style="color: #fa5252;">Letter Boxed Unlimited</span></h1>
-                <p class="hero-subtitle">Connect letters from opposite sides of the box to form a chain of words.</p>
-                
-                <div class="game-wrapper" style="max-width: 500px; height: 500px;">
-                    <iframe src="infinitewordle.github.io/letter-boxed-unlimited.html" title="Letter Boxed Unlimited Game" allowfullscreen></iframe>
-                </div>
-
-                <div class="hint-text">
-                    <p>The total word count to use all letters is your score.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="features" id="all-games">
-            <div class="container">
-                <h2 class="section-title">All Games 🎮</h2>
-                <div class="features-grid">
-                    <a href="/" class="feature-card tool-card"><div class="feature-icon" style="background-color: #6aaa64;"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/><path d="M15 21V9"/></svg></div><h3 style="color: #6aaa64;">Wordle</h3><p>The classic word guessing game. Unlimited.</p></a>
-                    <a href="/connections.html" class="feature-card tool-card"><div class="feature-icon" style="background-color: #b49fcc;"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="9" height="9" rx="1"/><rect x="13" y="2" width="9" height="9" rx="1"/><rect x="2" y="13" width="9" height="9" rx="1"/><rect x="13" y="13" width="9" height="9" rx="1"/></svg></div><h3 style="color: #b49fcc;">Connections</h3><p>Group words that share a common thread.</p></a>
-                    <a href="/spelling-bee.html" class="feature-card tool-card"><div class="feature-icon" style="background-color: #f7da21;"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><h3 style="color: #f7da21;">Spelling Bee</h3><p>How many words can you make with 7 letters?</p></a>
-                    <a href="/crossword.html" class="feature-card tool-card"><div class="feature-icon" style="background-color: #000000;"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 3v18"/><path d="M16 3v18"/><path d="M3 8h18"/><path d="M3 16h18"/></svg></div><h3 style="color: #000000;">Crossword</h3><p>The daily puzzle that tests your knowledge.</p></a>
-                    <a href="/mini-crossword.html" class="feature-card tool-card"><div class="feature-icon" style="background-color: #58a7d8;"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M5 10h14"/><path d="M5 14h14"/><path d="M10 5v14"/><path d="M14 5v14"/></svg></div><h3 style="color: #58a7d8;">Mini Crossword</h3><p>A bite-sized crossword solve in seconds.</p></a>
-                    <a href="/strands.html" class="feature-card tool-card"><div class="feature-icon" style="background-color: #ff6b6b;"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8-8-3.6-8-8z"/><path d="M12 8v8"/><path d="M8 12h8"/></svg></div><h3 style="color: #ff6b6b;">Strands</h3><p>Find hidden words in a grid of letters.</p></a>
-                    <a href="/letter-boxed.html" class="feature-card tool-card"><div class="feature-icon" style="background-color: #fa5252;"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="15.5" r="1.5"/><circle cx="8.5" cy="15.5" r="1.5"/></svg></div><h3 style="color: #fa5252;">Letter Boxed</h3><p>Connect letters around the box to make words.</p></a>
-                    <a href="/tiles.html" class="feature-card tool-card">
-                        <div class="feature-icon" style="background-color: #20c997;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                        </div>
-                        <h3 style="color: #20c997;">Tiles</h3>
-                        <p>Match elements in this visual zen puzzle.</p>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="how-it-works" id="how-to-play">
-            <div class="container">
-                <h2 class="section-title">How To Play Letter Boxed</h2>
-                <div class="steps">
-                    <div class="step">
-                        <div class="step-number">01</div>
-                        <h3>The Rule of Sides</h3>
-                        <p>Words must be formed by connecting letters on the sides of the box. You cannot use two letters from the same side consecutively.</p>
+    <div class="container">
+        <header>
+            <h1>LETTER BOXED</h1>
+            <p class="subtitle">Connect letters to form words. Use all letters to win!</p>
+        </header>
+        
+        <div class="game-container">
+            <div class="game-board">
+                <div class="box-container">
+                    <div class="box-row">
+                        <div class="letter-box" data-letter="S" data-side="top">S</div>
+                        <div class="letter-box" data-letter="T" data-side="top">T</div>
+                        <div class="letter-box" data-letter="R" data-side="top">R</div>
                     </div>
-                    <div class="step">
-                        <div class="step-number">02</div>
-                        <h3>The Chain</h3>
-                        <p>The **last letter** of one word must be the **first letter** of the next word in the chain.</p>
+                    <div class="box-row">
+                        <div class="letter-box" data-letter="A" data-side="left">A</div>
+                        <div class="letter-box" data-letter="E" data-side="middle">E</div>
+                        <div class="letter-box" data-letter="I" data-side="right">I</div>
                     </div>
-                    <div class="step">
-                        <div class="step-number">03</div>
-                        <h3>The Goal</h3>
-                        <p>The objective is to use all 12 unique letters on the box sides in the fewest words possible (usually 2, 3, or 4).</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">04</div>
-                        <h3>Length is Key</h3>
-                        <p>Words must be at least 3 letters long.</p>
+                    <div class="box-row">
+                        <div class="letter-box" data-letter="P" data-side="bottom">P</div>
+                        <div class="letter-box" data-letter="L" data-side="bottom">L</div>
+                        <div class="letter-box" data-letter="N" data-side="bottom">N</div>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section class="stats">
-            <div class="container">
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-number">∞</div>
-                        <div class="stat-label">Unlimited Games</div>
+            
+            <div class="game-controls">
+                <div class="controls-container">
+                    <div class="current-word" id="current-word">Click letters to form a word</div>
+                    
+                    <div class="word-list">
+                        <h3>Words Found</h3>
+                        <div class="words" id="word-list"></div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number">8+</div>
-                        <div class="stat-label">Game Modes</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">100%</div>
-                        <div class="stat-label">Free Forever</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-     <footer class="footer" id="about">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-widget">
-                    <h4 class="widget-title">About</h4>
-                    <p class="widget-text">Infinite Wordle is your destination for unlimited word puzzle fun. We collect the best logic, word, and spelling games in one place without daily restrictions.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link" aria-label="Twitter">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="footer-widget">
-                    <h4 class="widget-title">Games</h4>
-                    <ul class="widget-links">
-                        <li><a href="/">Wordle</a></li>
-                        <li><a href="/connections.html">Connections</a></li>
-                        <li><a href="/spelling-bee.html">Spelling Bee</a></li>
-                        <li><a href="/crossword.html">The Crossword</a></li>
-                        <li><a href="/mini-crossword.html">The Mini</a></li>
-                    </ul>
-                </div>                             
-
-                <div class="footer-widget">
-                    <h4 class="widget-title">Subscribe</h4>
-                    <p class="widget-text">Get new game alerts.</p>
-                    <form class="subscribe-form" id="subscribeForm">
-                        <input type="email" placeholder="Enter your email" class="subscribe-input" required>
-                        <button type="submit" class="subscribe-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M5 12h14"></path>
-                                <path d="m12 5 7 7-7 7"></path>
-                            </svg>
+                    
+                    <div class="buttons">
+                        <button class="btn btn-submit" id="submit-btn">
+                            <i class="fas fa-check"></i> Submit Word
                         </button>
-                    </form>
+                        <button class="btn btn-clear" id="clear-btn">
+                            <i class="fas fa-times"></i> Clear
+                        </button>
+                    </div>
+                    
+                    <button class="btn btn-new-game" id="new-game-btn">
+                        <i class="fas fa-redo"></i> New Game
+                    </button>
                 </div>
-            </div>
-
-            <div class="footer-bottom">
-                <div class="footer-logo">
-                    <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="32" height="32" fill="currentColor"/>
-                        <text x="16" y="22" font-family="monospace" font-size="18" font-weight="bold" text-anchor="middle" fill="var(--bg-primary)">I</text>
-                    </svg>
-                    <span>INFINITE WORDLE</span>
-                </div>
-                <div class="footer-links">
-                    <a href="/about.html" class="footer-link">About</a>
-                    <span class="footer-link-separator">|</span>
-                    <a href="/privacy-policy.html" class="footer-link">Privacy Policy</a>
-                    <span class="footer-link-separator">|</span>
-                    <a href="/terms-of-use.html" class="footer-link">Terms of Use</a>
-                </div>
-                <p class="copyright">&copy; 2025 Infinite Wordle. All rights reserved.</p>
             </div>
         </div>
-    </footer>
-
-    <div class="toast" id="toast">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
-        <span id="toastMessage">Success!</span>
+        
+        <div class="game-info">
+            <div class="info-box">
+                <h3>Words Found</h3>
+                <div class="info-value" id="word-count">0</div>
+            </div>
+            <div class="info-box">
+                <h3>Letters Used</h3>
+                <div class="info-value" id="letters-used">0/12</div>
+            </div>
+            <div class="info-box">
+                <h3>Score</h3>
+                <div class="info-value" id="score">0</div>
+            </div>
+        </div>
+        
+        <div class="rules">
+            <h2>How to Play</h2>
+            <ol>
+                <li>Create words using letters from the box.</li>
+                <li>Words must be at least 3 letters long.</li>
+                <li>Consecutive letters cannot be from the same side of the box.</li>
+                <li>Your next word must start with the last letter of your previous word.</li>
+                <li>Use all 12 letters at least once to solve the puzzle!</li>
+                <li>Click letters to select them, then submit your word.</li>
+            </ol>
+        </div>
+        
+        <footer>
+            <p></p>
+        </footer>
     </div>
+    
+    <div class="message" id="message"></div>
 
-    <script src="app.js"></script>
+    <script>
+        // Game state
+        let gameState = {
+            currentWord: [],
+            wordsFound: [],
+            lettersUsed: new Set(),
+            lastLetter: '',
+            score: 0,
+            gameComplete: false
+        };
+
+        // Letter configuration
+        const letters = [
+            {letter: 'S', side: 'top'},
+            {letter: 'T', side: 'top'},
+            {letter: 'R', side: 'top'},
+            {letter: 'A', side: 'left'},
+            {letter: 'E', side: 'middle'},
+            {letter: 'I', side: 'right'},
+            {letter: 'P', side: 'bottom'},
+            {letter: 'L', side: 'bottom'},
+            {letter: 'N', side: 'bottom'}
+        ];
+
+        // Valid word list (simplified for demo)
+        const validWords = [
+            'STRAIN', 'PLANET', 'TRAIN', 'PLANE', 'STREP', 'PANEL', 
+            'STRIPE', 'LEAP', 'NEAR', 'PEAR', 'PEAL', 'PEAN', 
+            'TAPE', 'TARP', 'RIPEN', 'RENT', 'LENT', 'PANT', 
+            'PART', 'ART', 'EAR', 'EAT', 'ATE', 'TEA', 'PAN', 
+            'NAP', 'RAP', 'TAP', 'PET', 'SET', 'SIT', 'SIP', 
+            'TIP', 'LIP', 'PIN', 'PIT', 'LIT', 'RIP', 'RAT', 
+            'SAT', 'PAT', 'LET', 'NET', 'TEN', 'PEN', 'ANT'
+        ];
+
+        // DOM elements
+        const letterBoxes = document.querySelectorAll('.letter-box');
+        const currentWordElement = document.getElementById('current-word');
+        const wordListElement = document.getElementById('word-list');
+        const submitButton = document.getElementById('submit-btn');
+        const clearButton = document.getElementById('clear-btn');
+        const newGameButton = document.getElementById('new-game-btn');
+        const wordCountElement = document.getElementById('word-count');
+        const lettersUsedElement = document.getElementById('letters-used');
+        const scoreElement = document.getElementById('score');
+        const messageElement = document.getElementById('message');
+
+        // Initialize game
+        function initGame() {
+            gameState = {
+                currentWord: [],
+                wordsFound: [],
+                lettersUsed: new Set(),
+                lastLetter: '',
+                score: 0,
+                gameComplete: false
+            };
+            
+            // Reset UI
+            updateUI();
+            
+            // Reset letter boxes
+            letterBoxes.forEach(box => {
+                box.classList.remove('selected', 'used', 'last-selected');
+                box.style.pointerEvents = 'auto';
+            });
+            
+            // Reset word list
+            wordListElement.innerHTML = '<p>No words found yet. Start playing!</p>';
+            
+            showMessage('New game started! Click letters to form words.', 'info');
+        }
+
+        // Show temporary message
+        function showMessage(text, type) {
+            messageElement.textContent = text;
+            messageElement.className = 'message ' + type;
+            
+            setTimeout(() => {
+                messageElement.classList.remove('success', 'error', 'info');
+            }, 3000);
+        }
+
+        // Update UI based on game state
+        function updateUI() {
+            // Update current word display
+            if (gameState.currentWord.length === 0) {
+                currentWordElement.textContent = gameState.lastLetter 
+                    ? `Next word must start with: ${gameState.lastLetter}` 
+                    : 'Click letters to form a word';
+            } else {
+                currentWordElement.textContent = gameState.currentWord.join('');
+            }
+            
+            // Update word list
+            if (gameState.wordsFound.length === 0) {
+                wordListElement.innerHTML = '<p>No words found yet. Start playing!</p>';
+            } else {
+                wordListElement.innerHTML = gameState.wordsFound
+                    .map(word => `<span class="word">${word}</span>`)
+                    .join('');
+            }
+            
+            // Update stats
+            wordCountElement.textContent = gameState.wordsFound.length;
+            lettersUsedElement.textContent = `${gameState.lettersUsed.size}/12`;
+            scoreElement.textContent = gameState.score;
+            
+            // Update letter box states
+            letterBoxes.forEach(box => {
+                const letter = box.dataset.letter;
+                box.classList.remove('last-selected');
+                
+                if (gameState.lastLetter === letter) {
+                    box.classList.add('last-selected');
+                }
+                
+                if (gameState.lettersUsed.has(letter)) {
+                    box.classList.add('used');
+                } else {
+                    box.classList.remove('used');
+                }
+            });
+            
+            // Check for game completion
+            if (gameState.lettersUsed.size === 12 && !gameState.gameComplete) {
+                gameState.gameComplete = true;
+                showMessage('Congratulations! You used all letters!', 'success');
+            }
+        }
+
+        // Check if word is valid
+        function isValidWord(word) {
+            // Check minimum length
+            if (word.length < 3) {
+                showMessage('Words must be at least 3 letters long.', 'error');
+                return false;
+            }
+            
+            // Check if word exists in our dictionary
+            if (!validWords.includes(word.toUpperCase())) {
+                showMessage(`"${word}" is not a valid word.`, 'error');
+                return false;
+            }
+            
+            // Check if first letter matches last letter of previous word
+            if (gameState.lastLetter && word[0].toUpperCase() !== gameState.lastLetter) {
+                showMessage(`Next word must start with "${gameState.lastLetter}".`, 'error');
+                return false;
+            }
+            
+            // Check that consecutive letters are from different sides
+            for (let i = 0; i < word.length - 1; i++) {
+                const currentLetter = word[i].toUpperCase();
+                const nextLetter = word[i + 1].toUpperCase();
+                
+                const currentBox = document.querySelector(`.letter-box[data-letter="${currentLetter}"]`);
+                const nextBox = document.querySelector(`.letter-box[data-letter="${nextLetter}"]`);
+                
+                if (currentBox && nextBox && currentBox.dataset.side === nextBox.dataset.side) {
+                    showMessage('Consecutive letters cannot be from the same side.', 'error');
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        // Submit word
+        function submitWord() {
+            if (gameState.currentWord.length === 0) {
+                showMessage('Please select at least 3 letters to form a word.', 'error');
+                return;
+            }
+            
+            const word = gameState.currentWord.join('');
+            
+            if (!isValidWord(word)) {
+                return;
+            }
+            
+            // Add word to found words
+            gameState.wordsFound.push(word);
+            
+            // Update last letter
+            gameState.lastLetter = word[word.length - 1].toUpperCase();
+            
+            // Add letters to used set
+            for (let letter of word.toUpperCase()) {
+                gameState.lettersUsed.add(letter);
+            }
+            
+            // Calculate score (more points for longer words)
+            gameState.score += word.length * 10;
+            
+            // Clear current word
+            gameState.currentWord = [];
+            
+            // Update UI
+            updateUI();
+            
+            // Show success message
+            showMessage(`"${word}" added! Next word must start with "${gameState.lastLetter}"`, 'success');
+        }
+
+        // Clear current word
+        function clearCurrentWord() {
+            gameState.currentWord = [];
+            letterBoxes.forEach(box => box.classList.remove('selected'));
+            updateUI();
+        }
+
+        // Event listeners for letter boxes
+        letterBoxes.forEach(box => {
+            box.addEventListener('click', () => {
+                if (gameState.gameComplete) return;
+                
+                const letter = box.dataset.letter;
+                
+                // Check if this letter can be selected (must follow last letter rule)
+                if (gameState.currentWord.length === 0 && gameState.lastLetter) {
+                    if (letter !== gameState.lastLetter) {
+                        showMessage(`Next word must start with "${gameState.lastLetter}"`, 'error');
+                        return;
+                    }
+                }
+                
+                // Check if letter is already selected in current word
+                if (box.classList.contains('selected')) {
+                    // If it's the last selected letter, allow deselecting
+                    if (gameState.currentWord[gameState.currentWord.length - 1] === letter) {
+                        box.classList.remove('selected');
+                        gameState.currentWord.pop();
+                        updateUI();
+                    }
+                    return;
+                }
+                
+                // Check if consecutive letters are from the same side
+                if (gameState.currentWord.length > 0) {
+                    const lastLetter = gameState.currentWord[gameState.currentWord.length - 1];
+                    const lastBox = document.querySelector(`.letter-box[data-letter="${lastLetter}"].selected`);
+                    
+                    if (lastBox && lastBox.dataset.side === box.dataset.side) {
+                        showMessage('Consecutive letters cannot be from the same side.', 'error');
+                        return;
+                    }
+                }
+                
+                // Add letter to current word
+                box.classList.add('selected');
+                gameState.currentWord.push(letter);
+                updateUI();
+            });
+        });
+
+        // Event listeners for buttons
+        submitButton.addEventListener('click', submitWord);
+        clearButton.addEventListener('click', clearCurrentWord);
+        newGameButton.addEventListener('click', initGame);
+
+        // Allow Enter key to submit word
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                submitWord();
+            } else if (e.key === 'Escape') {
+                clearCurrentWord();
+            }
+        });
+
+        // Initialize the game
+        initGame();
+
+        // Easter egg: add some random valid words to the list
+        function addValidWordsToMessage() {
+            const sampleWords = validWords.filter(word => word.length >= 4).slice(0, 5);
+            showMessage(`Try words like: ${sampleWords.join(', ')}`, 'info');
+        }
+        
+        // Show sample words after 5 seconds
+        setTimeout(addValidWordsToMessage, 5000);
+    </script>
 </body>
 </html>
